@@ -1,0 +1,264 @@
+@import url("style.sass");
+@import url('https://fonts.googleapis.com/css2?family=Yanone+Kaffeesatz&display=swap');
+*{
+    font-family: 'Yanone Kaffeesatz', sans-serif;
+    box-sizing: border-box;
+
+    --yellow: #FFE715;
+    --dark-grey: #232B32;
+    --light-grey: #3F4449;
+    --dark: #101920;
+}
+
+::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+  
+::-webkit-scrollbar-thumb {
+    background: rgba(90, 90, 90);
+}
+  
+::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.2);
+}
+
+/* bootstrap overrides */
+.tab-content{
+    margin-left: 150px;
+}
+
+.content-wrapper{
+    width: 100%;
+}
+
+.nav-pills .nav-link.active{
+    background-color: rgba(1,1,1,0);
+    color: var(--yellow);
+}
+
+.nav-link:focus, .nav-link:hover{
+    color: var(--light-grey);
+}
+
+.nav-link{
+    height: 40px;
+    text-align: left;
+    padding: 0.5rem 0rem;
+    color: white;
+}
+
+.nav-link i{
+    margin-right: 5%;
+}
+
+/* home */
+.navLogo{
+    width: 100%;
+    margin-bottom: 25%;
+}
+
+.nav{
+    position: fixed;
+    height: max-content;
+    padding: 1%;
+    background-color: var(--dark-grey);
+    margin-right: 0%!important;
+    height: 100%;
+    top: 0;
+    left: 0;
+    width: 150px;
+    margin-right: -150px;
+}
+
+.navTab{
+    width: 99%;
+    height: 5%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin-bottom: .5%;
+    margin-top: .5%;
+}
+
+#content{
+    height: 1000px;
+    width: auto;
+    margin-left: auto;
+    padding: 5px;
+    background-color: var(--dark);
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-content: flex-start;
+}
+
+.pageTitle{
+    color: white;
+    width: 99%;
+    margin-bottom: 0%;
+}
+
+.musicDisplay{
+    width: 99%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    margin-top: .5%;
+}
+
+.box{
+    background-color: var(--dark-grey);
+    border-left: 5px solid var(--yellow);
+    width: 30%;
+    display: flex;
+    flex-direction: row;
+    border-radius: 0px 5px 5px 0px;
+    -webkit-border-radius: 0px 5px 5px 0px;
+    -moz-border-radius: 0px 5px 5px 0px;
+    -ms-border-radius: 0px 5px 5px 0px;
+    -o-border-radius: 0px 5px 5px 0px;
+}
+
+.songImg{
+    width: 15%;
+}
+
+.songInfo{
+    margin-left: 10px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    color: whitesmoke;
+}
+
+.songTitle{
+    width: 200px;
+    font-weight: bold;
+    font-size: larger;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    letter-spacing: .5px;
+}
+
+p{
+    padding: 0;
+    margin: 0;
+}
+
+.boxLink{
+    padding: 0%;
+    width: 32.33%;
+    text-decoration: none;
+    color: black;
+    margin-bottom: .9%;
+}
+
+.boxLink .songInfo{
+    height: 80px;
+}
+
+.boxLink:hover .box{
+    border-left: 5px solid whitesmoke;
+}
+
+.boxLink .box{
+    width: 100%;
+    height: 100%;
+}
+
+#footer{
+    position: fixed;
+    text-align: center;
+    color: rgb(255, 255, 255);
+    width: 100%;
+    margin: auto;
+    left: 0;
+    bottom: 0;
+    background-color: black;
+    height: 90px;
+    padding: 10px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+#footer a{
+    text-decoration: none;
+    color: rgb(255, 255, 255)
+}
+
+/* player */
+.buttons{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.playpause-track,
+.next-track,
+.prev-track{
+    padding: 25px;
+    opacity: 0.8;
+
+    transition: opacity .2s;
+}
+
+.playpause-track:hover,
+.next-track:hover,
+.prev-track:hover{
+    opacity: 1;
+}
+
+.slider_container{
+    width: 75%;
+    max-width: 400px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.seek_slider, .volume_slider{
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    height: 5px;
+    background: black;
+    opacity: 0.7;
+    -webkit-transition: .2s;
+    transition: .2s;
+}
+
+.seek_slider::-webkit-slider-thumb,
+.volume_slider::-webkit-slider-thumb{
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    width: 15px;
+    height: 15px;
+    background: white;
+    cursor: pointer;
+    border-radius: 50%;
+}
+
+.seek_slider:hover,
+.volume_slider:hover{
+    opacity: 1;
+}
+
+.seek_slider{
+    width: 60%;
+}
+
+.volume_slider{
+    width: 30%;
+}
+
+.current-time,
+.total-duration{
+    padding: 10px;
+}
