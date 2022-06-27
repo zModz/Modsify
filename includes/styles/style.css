@@ -170,6 +170,7 @@ p{
     height: 100%;
 }
 
+/* player */
 #footer{
     position: fixed;
     text-align: center;
@@ -179,11 +180,11 @@ p{
     left: 0;
     bottom: 0;
     background-color: black;
-    height: 90px;
+    height: 120px;
     padding: 10px;
     display: flex;
     flex-direction: row;
-    justify-content: center;
+    justify-content: space-between;
     align-items: center;
 }
 
@@ -192,7 +193,6 @@ p{
     color: rgb(255, 255, 255)
 }
 
-/* player */
 .buttons{
     display: flex;
     flex-direction: row;
@@ -202,7 +202,7 @@ p{
 .playpause-track,
 .next-track,
 .prev-track{
-    padding: 25px;
+    padding: 15px;
     opacity: 0.8;
 
     transition: opacity .2s;
@@ -214,8 +214,16 @@ p{
     opacity: 1;
 }
 
-.slider_container{
+.playerCenter .slider_container{
     width: 75%;
+    max-width: 400px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.slider_container{
+    width: 283px;
     max-width: 400px;
     display: flex;
     justify-content: center;
@@ -227,7 +235,7 @@ p{
     -moz-appearance: none;
     appearance: none;
     height: 5px;
-    background: black;
+    background: lightgray;
     opacity: 0.7;
     -webkit-transition: .2s;
     transition: .2s;
@@ -261,4 +269,35 @@ p{
 .current-time,
 .total-duration{
     padding: 10px;
+}
+
+.buttons i{
+    width: 150%;
+}
+
+i.bi-volume-down-fill,
+i.bi-volume-up-fill{
+    padding: 10px;
+}
+
+i.bi-play-circle-fill,
+i.fa-pause-circle,
+i.bi-skip-end-fill,
+i.bi-skip-start-fill{
+    cursor: pointer;
+}
+
+.playerCenter{
+    width: 705px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+ #footer .playerImg-flex{
+    display: flex;
+    width: 283px;
+}
+
+.playerImg-flex .playerImg{
+    width: 35%;
 }

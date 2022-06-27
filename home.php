@@ -18,14 +18,15 @@ function clean($string) {
 <!DOCTYPE html>
 <html lang="en">
 <body>
-    <!-- NAV -->
-    <?php 
-        // include("includes/webpage/nav.php");
-    ?>
     <!-- CONTENT -->
     <div id="content">
+        
         <?php include("includes/webpage/navTab.php") ?> 
         <h1 class="pageTitle">HOME</h1>
+        <div class="nav-pills" aria-orientation="vertical">
+            <a data-toggle="pill" href="#v-pills-album">Menu 3</a>
+        </div>
+        
         <div class="musicDisplay">
             <?php 
                 if($result -> num_rows > 0){
