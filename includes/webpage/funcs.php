@@ -1,4 +1,188 @@
 <?php 
+
+class Bd
+{
+    protected $conexao;
+    protected $opcoes = [
+        PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+        PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+        PDO::ATTR_EMULATE_PREPARES => false
+    ];
+
+    public function __construct(){
+        if(file_exists('../htconfigs/config_modsify.php')){
+            $configs='../htconfigs/config_modsify.php';
+        }elseif(file_exists('../../htconfigs/config_modsify.php')){
+            $configs='../../htconfigs/config_modsify.php';
+        }elseif(file_exists('../../../htconfigs/config_modsify.php')){
+            $configs='../../../htconfigs/config_modsify.php';
+        }elseif(file_exists('../../../../htconfigs/config_modsify.php')){
+            $configs='../../../../htconfigs/config_modsify.php';
+        }else{
+            $configs='../../../../../htconfigs/config_modsify.php';
+        }
+
+        require_once($configs);
+        $dsn = "mysql:host=$host;dbname=$db;charset=utf8mb4";
+        $opcoes = $this->opcoes;  
+        try{
+            $con=new PDO($dsn, $user, $pass, $opcoes);
+            $this->conexao= $con;
+        }catch(PDOException $e ){
+            die("Deu erro: ".$e->getMessage());
+        }
+    }
+    
+    public function getPDO(){
+        return $this->conexao;
+    }
+}
+
+class Album{
+    private $conexao;
+    public function __construct()
+    {
+        $pdo=new Bd;
+        $con=$pdo->getPDO();
+        $this->conexao=$con;
+        unset($pdo);
+    }
+
+    public function fechaConn(){
+        unset($this->conexao);
+    }
+
+    public function listarAlbum(){
+        // sql shenenigans
+        $sql = "SELECT * FROM album ORDER BY nome_al ASC";
+        $conn = $this->conexao;
+        // $sql = "SELECT titulo_m, nome_al, ano_al FROM musica RIGHT JOIN album ON musica.album_id_al = album.id_al ORDER BY titulo_m ASC";
+        $result = $conn -> query($sql);
+        $dados = $result->fetchAll();
+        return $dados;
+    }
+
+    public function listarAlbumInfo(){
+        $ida = $_GET['ida'];
+
+        $sql = "SELECT id_al, nome_al, ano_al, nome_a, artista_id_a, image_al FROM album
+                LEFT JOIN artista ON artista.id_a = artista_id_a
+                WHERE id_al = ?";
+        
+        $res = $this->conexao->prepare($sql);
+        $res->execute([$ida]);
+        $dados = $res->fetchAll();
+        return $dados;
+    }
+
+    public function mostrarAlbuns($res){
+        foreach ($res as $row) {
+            $id = $row["id_al"];
+            $titulo = $row["nome_al"];
+            $ano = $row["ano_al"];
+            $img = $row["image_al"];
+
+            echo '<a class="boxLink" href="album/album.php?ida='.$id.'">';
+            echo '<div class="box">';
+            if(file_exists('media/'.$img.'.jpg')){
+                echo '<img class="songImg" src="media/'.$img.'.jpg" alt="default album cover">';
+            }
+            else{
+                echo '<img class="songImg" src="media/default-album-art.jpg" alt="default album cover">';
+            }
+            echo    '<div class="songInfo">';
+            echo        '<p class="songTitle" title="'.$titulo.'">'.$titulo.'</p>';
+            echo    '</div>';
+            echo '</div>';
+            echo '</a>';
+        }
+    }
+
+    public function mostrarInfo($res){
+        foreach ($res as $row) {
+            $id = $row["id_al"];
+            $titulo = $row["nome_al"];
+            $ano = $row["ano_al"];
+            $nome_a = $row["nome_a"];
+            $img = $row["image_al"];
+
+            echo '<div class="album_banner">';
+            if(file_exists('media/'.$img.'.jpg')){
+                echo '<img class="songImg" src="media/'.$img.'.jpg" alt="default album cover">';
+            }
+            else{
+                echo '<img class="songImg" src="media/default-album-art.jpg" alt="default album cover">';
+            }
+            echo    '<div class="albumInfo">';
+            echo        '<p class="albumTitle">'.$titulo.'</p>';
+            echo        '<p class="albumAno">'.$nome_a.' • '.$ano.' • './*$numRows.*/' MUSICAS • ';
+                            // AlbmGenre($row["id_al"]);
+            echo        '</p>';
+            echo    '</div>';
+            echo '</div>';
+            echo '<br>';
+        }
+    }
+}
+
+class Songs{
+    private $conexao;
+    public function __construct()
+    {
+        $pdo=new Bd;
+        $con=$pdo->getPDO();
+        $this->conexao=$con;
+        unset($pdo);
+    }
+
+    public function fechaConn(){
+        unset($this->conexao);
+    }
+
+    public function listarSongs(){
+        $ida = $_GET['ida'];
+
+        $sql = "SELECT titulo_m, id_al, id_m FROM musica 
+                LEFT JOIN album ON album.id_al = musica.album_id_al 
+                WHERE id_al = ?";
+
+        $res = $this->conexao->prepare($sql);
+        $res->execute([$ida]);
+        $dados = $res->fetchAll();
+        return $dados;
+    }
+
+    public function mostrarSongs($res)
+    {
+        foreach ($res as $row) {
+            $id = $row["id_m"];
+            $titulo = $row["titulo_m"];
+            
+            echo '<h1 style="color: white;">MUSICAS</h1>';
+            echo '<div class="musicShow">';                 
+                echo    '<div class="songInfo">';
+                echo        '<p class="songTitle">'.$titulo.'</p>';
+                echo        '<p class="songYear">';
+                                // artistList($row["id_m"]);
+                echo        '</p>';
+                echo    '</div>';
+            echo '</div>';
+        }
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
 if($_SERVER['REQUEST_METHOD']=='POST' && isset($_POST['fuser'])){
     // passar p variaveis locais os dados do form de login
     $user=$_POST['fuser'];
@@ -31,7 +215,6 @@ if($_SERVER['REQUEST_METHOD']=='POST' && isset($_POST['fuser'])){
 if(!isset($msgLog)){
     $msgLog="";
 }
-
 
 function AlbmGenre($idal){
     include("includes/db/db_conn.php");
