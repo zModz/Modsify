@@ -26,8 +26,8 @@ class Bd
         $dsn = "mysql:host=$host;dbname=$db;charset=utf8mb4";
         $opcoes = $this->opcoes;  
         try{
-            $con=new PDO($dsn, $user, $pass, $opcoes);
-            $this->conexao= $con;
+            $con = new PDO($dsn, $user, $pass, $opcoes);
+            $this->conexao = $con;
         }catch(PDOException $e ){
             die("Deu erro: ".$e->getMessage());
         }
@@ -39,23 +39,22 @@ class Bd
 }
 
 class Album{
-    private $conexao;
-    public function __construct()
-    {
-        $pdo=new Bd;
-        $con=$pdo->getPDO();
-        $this->conexao=$con;
+    private $conexao_al;
+    public function __construct(){
+        $pdo = new Bd;
+        $con = $pdo->getPDO();
+        $this->conexao_al = $con;
         unset($pdo);
     }
 
     public function fechaConn(){
-        unset($this->conexao);
+        unset($this->conexao_al);
     }
 
     public function listarAlbum(){
         // sql shenenigans
         $sql = "SELECT * FROM album ORDER BY nome_al ASC";
-        $conn = $this->conexao;
+        $conn = $this->conexao_al;
         // $sql = "SELECT titulo_m, nome_al, ano_al FROM musica RIGHT JOIN album ON musica.album_id_al = album.id_al ORDER BY titulo_m ASC";
         $result = $conn -> query($sql);
         $dados = $result->fetchAll();
@@ -69,7 +68,7 @@ class Album{
                 LEFT JOIN artista ON artista.id_a = artista_id_a
                 WHERE id_al = ?";
         
-        $res = $this->conexao->prepare($sql);
+        $res = $this->conexao_al->prepare($sql);
         $res->execute([$ida]);
         $dados = $res->fetchAll();
         return $dados;
@@ -127,11 +126,10 @@ class Album{
 
 class Songs{
     private $conexao;
-    public function __construct()
-    {
-        $pdo=new Bd;
-        $con=$pdo->getPDO();
-        $this->conexao=$con;
+    public function __construct(){
+        $pdo = new Bd;
+        $con = $pdo->getPDO();
+        $this->conexao = $con;
         unset($pdo);
     }
 
@@ -152,8 +150,7 @@ class Songs{
         return $dados;
     }
 
-    public function mostrarSongs($res)
-    {
+    public function mostrarSongs($res){
         foreach ($res as $row) {
             $id = $row["id_m"];
             $titulo = $row["titulo_m"];
@@ -183,74 +180,73 @@ class Songs{
 
 
 
-if($_SERVER['REQUEST_METHOD']=='POST' && isset($_POST['fuser'])){
-    // passar p variaveis locais os dados do form de login
-    $user=$_POST['fuser'];
-    $pass=$_POST['fpass'];
-    $erro = false;
+// if($_SERVER['REQUEST_METHOD']=='POST' && isset($_POST['fuser'])){
+//     // passar p variaveis locais os dados do form de login
+//     $user=$_POST['fuser'];
+//     $pass=$_POST['fpass'];
+//     $erro = false;
 
-    //pedir à BD a info do user preenchido
-    $sql="SELECT * FROM users WHERE nome_u='$user'";
-    $resultado=mysqli_query($conn, $sql);
+//     //pedir à BD a info do user preenchido
+//     $sql="SELECT * FROM users WHERE nome_u='$user'";
+//     $resultado=mysqli_query($conn, $sql);
 
-    /* caso a BD tenha retornado algum registo... ou seja SE o utilizador foi reconhecido  */
-    if(mysqli_num_rows($resultado)>0){
-        $linha=mysqli_fetch_array($resultado);
-        // guardar como var local a info retornada da BD: a password encriptada e o nivel de acesso
-        $passBd=$linha['pass_u'];
-        $nivel =$linha['nivel_u'];
+//     /* caso a BD tenha retornado algum registo... ou seja SE o utilizador foi reconhecido  */
+//     if(mysqli_num_rows($resultado)>0){
+    //         $linha=mysqli_fetch_array($resultado);
+    //         // guardar como var local a info retornada da BD: a password encriptada e o nivel de acesso
+    //         $passBd=$linha['pass_u'];
+    //         $nivel =$linha['nivel_u'];
         
-        // Verificar se a pass preenchida corresponde à pass armazenada na BD
-        if(password_verify($pass,$passBd)){
-            $_SESSION['user']=$user;
-            $_SESSION['nivel']=$nivel;
-        }else{
-            $msgLog= "<p class='logP'>A password está incorreta</p>";
-        }    
-    }else{
-        $msgLog= "<p class='logP'>O utilizador $user não foi encontrado</p>";
-    }
-}
+//         // Verificar se a pass preenchida corresponde à pass armazenada na BD
+//         if(password_verify($pass,$passBd)){
+    //             $_SESSION['user']=$user;
+    //             $_SESSION['nivel']=$nivel;
+    //         }else{
+        //             $msgLog= "<p class='logP'>A password está incorreta</p>";
+        //         }    
+        //     }else{
+//         $msgLog= "<p class='logP'>O utilizador $user não foi encontrado</p>";
+//     }
+// }
 
-if(!isset($msgLog)){
-    $msgLog="";
-}
+// if(!isset($msgLog)){
+    //     $msgLog="";
+    // }
 
-function AlbmGenre($idal){
-    include("includes/db/db_conn.php");
-    $ida = $idal;
-    $sqlUp2 = "SELECT id_al, generos.id_g, generos.nome_g FROM album 
-                LEFT JOIN album_has_generos ON album_has_generos.album_id_al = album.id_al 
-                LEFT JOIN generos ON generos.id_g = album_has_generos.generos_id_g
-                WHERE id_al = '$ida'";
-    $result2 = mysqli_query($conn, $sqlUp2);
+    // function AlbmGenre($idal){
+        //     include("includes/db/db_conn.php");
+//     $ida = $idal;
+//     $sqlUp2 = "SELECT id_al, generos.id_g, generos.nome_g FROM album 
+//                 LEFT JOIN album_has_generos ON album_has_generos.album_id_al = album.id_al 
+//                 LEFT JOIN generos ON generos.id_g = album_has_generos.generos_id_g
+//                 WHERE id_al = '$ida'";
+//     $result2 = mysqli_query($conn, $sqlUp2);
     
-    while($rowArt = $result2 -> fetch_array()){
-        if($rowArt["id_g"] > 1 && $rowArt["id_al"] == $ida){
-            echo " ".$rowArt["nome_g"];
-        }else{
-            echo $rowArt["nome_g"];
-        }
-    }
-}
+//     while($rowArt = $result2 -> fetch_array()){
+//         if($rowArt["id_g"] > 1 && $rowArt["id_al"] == $ida){
+//             echo " ".$rowArt["nome_g"];
+//         }else{
+//             echo $rowArt["nome_g"];
+//         }
+//     }
+// }
 
-function artistList($idmu){
-    include("includes/db/db_conn.php");
-    $idm = $idmu;
-    $sqlUp = "SELECT id_m, artista.id_a, artista.nome_a FROM musica 
-                LEFT JOIN musica_has_artista ON musica_id_m = musica.id_m 
-                LEFT JOIN artista ON artista.id_a = musica_has_artista.artista_id_a
-                WHERE id_m = '$idm'";
-    $result = mysqli_query($conn, $sqlUp);
-
-    while($rowArt = $result -> fetch_array()){
-        if($rowArt["id_a"] > 1 && $rowArt["id_m"] == $idm){
-            echo ", ".$rowArt["nome_a"];
-        }else{
-            echo $rowArt["nome_a"];
-        }
-    } 
-}
-
+// function artistList($idmu){
+    //     include("includes/db/db_conn.php");
+    //     $idm = $idmu;
+    //     $sqlUp = "SELECT id_m, artista.id_a, artista.nome_a FROM musica 
+    //                 LEFT JOIN musica_has_artista ON musica_id_m = musica.id_m 
+    //                 LEFT JOIN artista ON artista.id_a = musica_has_artista.artista_id_a
+    //                 WHERE id_m = '$idm'";
+    //     $result = mysqli_query($conn, $sqlUp);
+    
+    //     while($rowArt = $result -> fetch_array()){
+        //         if($rowArt["id_a"] > 1 && $rowArt["id_m"] == $idm){
+            //             echo ", ".$rowArt["nome_a"];
+//         }else{
+//             echo $rowArt["nome_a"];
+//         }
+//     } 
+// }
 
 ?>
