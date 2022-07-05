@@ -38,12 +38,13 @@ class Bd
     }
 }
 
+
 class Album{
-    private $conexao_al;
+    private $conexao;
     public function __construct(){
         $pdo = new Bd;
         $con = $pdo->getPDO();
-        $this->conexao_al = $con;
+        $this->conexao = $con;
         unset($pdo);
     }
 
@@ -54,25 +55,25 @@ class Album{
     public function listarAlbum(){
         // sql shenenigans
         $sql = "SELECT * FROM album ORDER BY nome_al ASC";
-        $conn = $this->conexao_al;
+        $conn = $this->conexao;
         // $sql = "SELECT titulo_m, nome_al, ano_al FROM musica RIGHT JOIN album ON musica.album_id_al = album.id_al ORDER BY titulo_m ASC";
         $result = $conn -> query($sql);
         $dados = $result->fetchAll();
         return $dados;
     }
 
-    public function listarAlbumInfo(){
+    /*public function listarAlbumInfo(){
         $ida = $_GET['ida'];
 
         $sql = "SELECT id_al, nome_al, ano_al, nome_a, artista_id_a, image_al FROM album
                 LEFT JOIN artista ON artista.id_a = artista_id_a
                 WHERE id_al = ?";
         
-        $res = $this->conexao_al->prepare($sql);
+        $res = $this->conexao->prepare($sql);
         $res->execute([$ida]);
         $dados = $res->fetchAll();
         return $dados;
-    }
+    }*/
 
     public function mostrarAlbuns($res){
         foreach ($res as $row) {
@@ -97,8 +98,18 @@ class Album{
         }
     }
 
-    public function mostrarInfo($res){
-        foreach ($res as $row) {
+    public function mostrarInfo(){
+        $ida = $_GET['ida'];
+
+        $sql = "SELECT id_al, nome_al, ano_al, nome_a, artista_id_a, image_al FROM album
+                LEFT JOIN artista ON artista.id_a = artista_id_a
+                WHERE id_al = ?";
+        
+        $res = $this->conexao->prepare($sql);
+        $res->execute([$ida]);
+        $dados = $res->fetchAll();
+        
+        foreach ($dados as $row) {
             $id = $row["id_al"];
             $titulo = $row["nome_al"];
             $ano = $row["ano_al"];
@@ -120,6 +131,26 @@ class Album{
             echo    '</div>';
             echo '</div>';
             echo '<br>';
+        }
+    }
+
+    public function addAlbum()
+    {
+        $addArray=[
+            'nome_al'       => $_POST['Mtitulo'],
+            'ano_al'        => $_POST['Aano']
+            ];
+
+        $sql = "INSERT INTO album (nome_al, ano_al) VALUES (:nome_al, :ano_al)";
+        $conn = $this->conexao;
+        $result = $conn->prepare($sql);
+        $res = $result->execute($addArray);
+
+        /* verificar o sucesso na inserçao dos dados na BD*/
+        if($res === TRUE){
+            header("location:index.php?alerta=1");
+        }else{
+            header("location:index.php?alerta=0");
         }
     }
 }

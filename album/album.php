@@ -3,10 +3,10 @@
 include("../includes/webpage/funcs.php");
 
 $a = new Album;
-$s = new Songs;
+//$s = new Songs;
 
-$res = $a->listarAlbumInfo();
-$res2 = $s->listarSongs();
+//$res = $a->listarAlbumInfo();
+//$res2 = $s->listarSongs();
 
 ?>
 
@@ -18,7 +18,7 @@ $res2 = $s->listarSongs();
     <div id="content">
         <div class="albumPage">
             <?php
-                $a->mostrarInfo($res);
+                $a->mostrarInfo();
                 $s->mostrarSongs($res2);
             ?>
         </div>
