@@ -22,7 +22,7 @@ class Bd
             $configs='../../../../../htconfigs/config_modsify.php';
         }
 
-        require_once($configs);
+        require($configs); // <- FUCK YOU YOU FUCKING LINE PIECE OF SHIT I SWEAR I'LL DESTROY YOU FROM THE INSIDE!!
         $dsn = "mysql:host=$host;dbname=$db;charset=utf8mb4";
         $opcoes = $this->opcoes;  
         try{
