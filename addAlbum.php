@@ -1,6 +1,6 @@
 <?php 
 session_start();
-require_once("../includes/webpage/funcs.php");
+require_once("includes/webpage/funcs.php");
 
 // if(!$_SESSION["user"]){
 //   header("erro.php");
@@ -16,7 +16,7 @@ if($_SERVER['REQUEST_METHOD']=='POST' && isset($_POST["Mtitulo"])){
 
 <!DOCTYPE html>
 <html lang="en">
-<?php include("../includes/webpage/head.php"); ?>
+<?php include("includes/webpage/head.php"); ?>
 <body>
     <!-- CONTENT -->
     <div id="content">
