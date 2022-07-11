@@ -38,6 +38,51 @@ class Bd
     }
 }
 
+Class User{
+    private $conexao;
+
+    public function __construct(){
+        $pdo=new Bd;
+        $con=$pdo->getPDO();
+        $this->conexao=$con;
+        unset($pdo);
+    }
+
+    public function user_verify($username){
+        $conexao=$this->conexao;
+        
+        $sql = "SELECT * FROM users WHERE nome_u=?";
+        $resultado = $conexao->prepare($sql);
+        $resultado->execute([$username]);
+        $dados = $resultado->fetchAll();
+        print_r($dados);
+        
+        $pass = $dados[0]["pass_u"];
+        $passHash = password_verify($pass, PASSWORD_DEFAULT);
+        
+        if(!empty($dados) || $passHash != $pass){
+            echo "DEU ERRO!";
+        }else{
+            echo "DEU CERTO!";
+        }
+    }
+
+    public function adduser($username){
+        $password = password_hash($_POST["password"], PASSWORD_DEFAULT);
+
+        $conexao=$this->conexao;
+        
+        $sql = "INSERT INTO users (nome_u, pass_u) VALUES (:username, :password)";
+        $stmt = $conexao->prepare($sql);
+        $resultado=$stmt->execute([$username,$password]);
+        
+        if($resultado == TRUE){
+            header("location:index.php?alerta=6");
+        }else{
+            header("location:index.php?alerta=0");
+        }
+    }
+}
 
 class Album{
     private $conexao;
