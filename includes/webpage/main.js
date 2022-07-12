@@ -1,21 +1,28 @@
 window.onload = function() {
-    var li_items = document.querySelectorAll(".sidebar ul li");
-    var hamburger = document.querySelector(".hamburger");
-    var wrapper = document.querySelector(".wrapper");
+    const body = document.querySelector('body'),
+          sidebar = body.querySelector('.sidebar'),
+          toggle = body.querySelector(".toggle"),
+          searchBtn = body.querySelector(".search-box"),
+          modeSwitch = body.querySelector(".toggle-switch"),
+          modeText = body.querySelector(".mode-text");
 
-    li_items.forEach((li_item)=>{
-        li_item.addEventListener("mouseenter", ()=>{
-            li_item.closest(".wrapper").classList.remove("hover_collapse");
-       })
-    })
+
+toggle.addEventListener("click" , () =>{
+    sidebar.classList.toggle("close");
+})
+
+searchBtn.addEventListener("click" , () =>{
+    sidebar.classList.remove("close");
+})
+
+modeSwitch.addEventListener("click" , () =>{
+    body.classList.toggle("dark");
     
-    li_items.forEach((li_item)=>{
-        li_item.addEventListener("mouseleave", ()=>{
-            li_item.closest(".wrapper").classList.add("hover_collapse");
-        })
-    })
-    
-    hamburger.addEventListener("click", () => {
-        hamburger.closest(".wrapper").classList.toggle("hover_collapse");
-    })
+    if(body.classList.contains("dark")){
+        modeText.innerText = "Light mode";
+    }else{
+        modeText.innerText = "Dark mode";
+        
+    }
+});
 };
