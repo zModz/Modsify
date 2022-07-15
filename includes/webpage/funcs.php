@@ -51,30 +51,32 @@ Class User{
     public function user_verify($username){
         $conexao=$this->conexao;
         
-        $sql = "SELECT * FROM users WHERE nome_u=?";
+        $sql = "SELECT * FROM users WHERE nome_u = :username";
         $resultado = $conexao->prepare($sql);
         $resultado->execute([$username]);
-        $dados = $resultado->fetchAll();
+        $dados = $resultado->fetch();
         print_r($dados);
         
-        $pass = $dados[0]["pass_u"];
-        $passHash = password_verify($pass, PASSWORD_DEFAULT);
+        $pass = $dados["pass_u"];
+        $passHash = password_verify($_POST["fpass"], $pass);
         
-        if(!empty($dados) || $passHash != $pass){
+        if(!empty($dados) || $passHash == false){
             echo "DEU ERRO!";
+            echo $passHash;
         }else{
             echo "DEU CERTO!";
+            echo $passHash;
         }
     }
 
     public function adduser($username){
-        $password = password_hash($_POST["password"], PASSWORD_DEFAULT);
+        $password = password_hash($_POST["fpass"], PASSWORD_DEFAULT);
 
         $conexao=$this->conexao;
         
         $sql = "INSERT INTO users (nome_u, pass_u) VALUES (:username, :password)";
         $stmt = $conexao->prepare($sql);
-        $resultado=$stmt->execute([$username,$password]);
+        $resultado=$stmt->execute([$username, $password]);
         
         if($resultado == TRUE){
             header("location:index.php?alerta=6");
@@ -151,9 +153,9 @@ class Album{
             $nome_a = $row["nome_a"];
             $img = $row["image_al"];
 
-            echo '<div class="album_banner">';
+            echo '<div id="banner" class="album_banner">';
             if(file_exists('media/'.$img.'')){
-                echo '<img class="songImg" src="media/'.$img.'" alt="'.$titulo.'">';
+                echo '<img id="songImg" class="songImg" src="media/'.$img.'" alt="'.$titulo.'">';
             }
             else{
                 echo '<img class="songImg" src="media/default-album-art.jpg" alt="default album cover">';

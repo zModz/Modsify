@@ -11,8 +11,7 @@
     <?php include("includes/webpage/navbar.php") ?>
     <div id="content">
         <div style="height: 60px; width: 100%;">&nbsp;</div>
-        <?php include("includes/webpage/navTab.php") ?> 
-        <h1 class="pageTitle">HOME</h1>
+        <h1 class="pageTitle">BEM-VINDO DE VOLTA, USER</h1>
         <div class="musicDisplay">
             <?php 
                 $a->mostrarAlbuns($res);

@@ -3,11 +3,28 @@
         <!-- logo -->
             <div class="logo">
                 <span class="text">MODSIFY</span>
+                
+                <div class="hamburger toggle icon">
+                    <i class="bi bi-list"></i>
+                </div>
             </div>
         <!-- menu button -->
         <div class="menu">
-            <div class="hamburger toggle icon">
-                <i class="bi bi-list"></i>
+            <div class="navBtns">
+                <a href="#" class="previous round" onclick="history.back();">&#8249;</a>
+                <a href="#" class="next round" onclick="history.forward();">&#8250;</a>
+            </div>
+            <div class="dropdown">
+                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    PERSON_NAME
+                </button>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                    <a class="dropdown-item" href="#">Action</a>
+                    <a class="dropdown-item" href="#">Another action</a>
+                    <a class="dropdown-item" href="#">Something else here</a>
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item" href="#">Separated link</a>
+                </div>
             </div>
         </div>
     </div>

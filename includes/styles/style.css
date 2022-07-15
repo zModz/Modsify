@@ -1,13 +1,12 @@
-@import url("style.sass");
 @import url('https://fonts.googleapis.com/css2?family=Yanone+Kaffeesatz&display=swap');
 *{
     font-family: 'Yanone Kaffeesatz', sans-serif;
     box-sizing: border-box;
 
-    --yellow: #FFE715;
+    /* --yellow: #FFE715;
     --dark-grey: #232B32;
     --light-grey: #3F4449;
-    --dark: #101920;
+    --dark: #101920; */
 
     --topbar-height: 60px;
 
@@ -22,7 +21,7 @@
     --primary-color: #695CFE;
     --primary-color-light: #F6F5FF;
     --toggle-color: #DDD;
-    --text-color: #707070;
+    --text-color: #000000;
 
     /* ====== Transition ====== */
     --tran-03: all 0.2s ease;
@@ -34,10 +33,10 @@
 body.dark{
     --body-color: #18191a;
     --sidebar-color: #242526;
-    --primary-color: #3a3b3c;
+    --primary-color: #FFE715;
     --primary-color-light: #3a3b3c;
     --toggle-color: #fff;
-    --text-color: #ccc;
+    --text-color: #ffffff;
 }
 
 body{
@@ -77,6 +76,9 @@ body{
 }
 
 .top_navbar .logo{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
     width: 250px;
     font-size: 25px;
     font-weight: 700;
@@ -103,6 +105,31 @@ body{
 
 .top_navbar .hamburger:hover{
     color: #007dc3;
+}
+
+.navBtns a{
+    text-decoration: none;
+    display: inline-block;
+    padding: 4px 14px;
+}
+  
+.navBtns a:hover{
+    background-color: var(--toggle-color);
+    color: black;
+}
+
+.previous {
+    background-color: var(--primary-color);
+    color: var(--text-color);
+}
+
+.next {
+    background-color: var(--primary-color);
+    color: var(--text-color);
+}
+
+.round {
+    border-radius: 50%;
 }
 
 .sidebar{
@@ -324,11 +351,11 @@ body.dark .switch::before{
 }
 
 #content{
-    height: 1000px;
+    height: 2000px;
     width: calc(100% - 88px);
     margin-left: auto;
-    padding: 5px;
-    background-color: var(--dark);
+    padding: 10px;
+    background-color: var(--body-color);
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
@@ -337,7 +364,7 @@ body.dark .switch::before{
 }
 
 .pageTitle{
-    color: white;
+    color: var(--text-color);
     width: 99%;
     margin-bottom: 0%;
 }
@@ -351,8 +378,8 @@ body.dark .switch::before{
 }
 
 .box{
-    background-color: var(--dark-grey);
-    border-left: 5px solid var(--yellow);
+    background-color: var(--primary-color-light);
+    border-left: 5px solid var(--primary-color);
     min-width: 30%;
     display: flex;
     flex-direction: row;
@@ -373,7 +400,7 @@ body.dark .switch::before{
     display: flex;
     flex-direction: column;
     justify-content: center;
-    color: whitesmoke;
+    color: var(--text-color);
 }
 
 .songTitle{
@@ -410,6 +437,96 @@ p{
 .boxLink .box{
     width: 100%;
     height: 100%;
+}
+
+/* ALBUM PAGE */
+.albumPage{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.album_banner{
+    display: flex;
+    border-radius: 5px 0px 0px 5px;
+    /* background-image: linear-gradient(to right, rgba(0, 162, 255, 1), rgba(1, 1, 1, 0)); */
+    -webkit-border-radius: 5px 0px 0px 5px;
+    -moz-border-radius: 5px 0px 0px 5px;
+    -ms-border-radius: 5px 0px 0px 5px;
+    -o-border-radius: 5px 0px 0px 5px;
+}
+
+.album_banner .songImg{
+    width: 200px;
+    border-radius: 5px 0px 0px 5px;
+    -webkit-border-radius: 5px 0px 0px 5px;
+    -moz-border-radius: 5px 0px 0px 5px;
+    -ms-border-radius: 5px 0px 0px 5px;
+    -o-border-radius: 5px 0px 0px 5px;
+}
+
+.album_banner .albumInfo{
+    width: 50%;
+    margin-left: 10px;
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.album_banner .albumTitle{
+    font-size: 50px;
+    color: var(--text-color);
+}
+
+.album_banner .albumAno{
+    font-size: 15px;
+    color: var(--text-color);
+}
+
+.musicShow{
+    display: flex;
+    flex-direction: column;
+}
+
+.musicShow .songInfo{
+    margin: 2px;
+    margin-left: 0;
+    padding: 10px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    color: var(--text-color);
+    background-color: var(--primary-color-light);
+    border-left: 5px solid var(--primary-color);
+    border-radius: 0px 5px 5px 0px;
+    -webkit-border-radius: 0px 5px 5px 0px;
+    -moz-border-radius: 0px 5px 5px 0px;
+    -ms-border-radius: 0px 5px 5px 0px;
+    -o-border-radius: 0px 5px 5px 0px;
+}
+
+.musicShow .songTitle{
+    width: 900px;
+}
+
+.albumBtns{
+    margin-top: 1%;
+}
+
+.albumBtns .alBtn{
+    margin-right: 1%;
+    
+}
+
+.songBtns{
+    margin-top: .5%;
+}
+
+.songBtns .sgBtn{
+    margin-right: .5%;
+    
 }
 
 /* player */
