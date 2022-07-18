@@ -4,9 +4,11 @@ include("includes/webpage/funcs.php");
 
 $a = new Album;
 $s = new Songs;
+$ar = new Artista;
 
 $res = $a->listarAlbumInfo();
 $res2 = $s->listarSongs();
+$resAr = $ar->ListarArtistaInfo();
 
 ?>
 
@@ -22,6 +24,7 @@ $res2 = $s->listarSongs();
                 $a->mostrarInfo($res);
                 echo '<h1 style="color: var(--text-color);">MUSICAS</h1>';
                 $s->mostrarSongs($res2);
+                $ar->mostrarInfoArtista($resAr)
             ?>
         </div>
     </div>

@@ -1,16 +1,10 @@
 @import url('https://fonts.googleapis.com/css2?family=Yanone+Kaffeesatz&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
 *{
-    font-family: 'Yanone Kaffeesatz', sans-serif;
+    /* font-family: 'Poppins', sans-serif; */
     box-sizing: border-box;
-
-    /* --yellow: #FFE715;
-    --dark-grey: #232B32;
-    --light-grey: #3F4449;
-    --dark: #101920; */
-
-    --topbar-height: 60px;
-
     
+    --topbar-height: 60px;
     /* FIREBOX SCROLLBAR */
     scrollbar-width: thin;
     scrollbar-color: rgba(90, 90, 90) rgba(0, 0, 0, 0.2);
@@ -43,6 +37,7 @@ body.dark{
 }
 
 body{
+    font-family: 'Yanone Kaffeesatz', sans-serif;
     transition: var(--tran-05);
 }
 
@@ -384,6 +379,41 @@ body.dark .switch::before{
     margin-top: .5%;
 }
 
+.artistDisplay{
+    width: 99%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+.card{
+    width: 100%!important;
+    margin-top: .5%!important;
+    background-color: var(--primary-color-light)!important;
+    position: unset!important;
+    border: unset;
+    border-radius: 0px 0px 5px 5px;
+    border-top: 5px solid var(--primary-color)!important;
+    -webkit-border-radius: 0px 0px 5px 5px;
+    -moz-border-radius: 0px 0px 5px 5px;
+    -ms-border-radius: 0px 0px 5px 5px;
+    -o-border-radius: 0px 0px 5px 5px;
+}
+
+.card-img-top{
+    border-top-right-radius: unset;
+    border-top-left-radius: unset;
+}
+
+.card-title{
+    color: var(--text-color);
+    text-transform: uppercase;
+    font-size: large;
+    font-weight: bolder;
+    letter-spacing: .5px;
+    margin-bottom: 0px;
+}
+
 .box{
     background-color: var(--primary-color-light);
     border-left: 5px solid var(--primary-color);
@@ -429,12 +459,16 @@ body.dark .switch::before{
 .albumArts{
     min-width: 200px;
     font-size: large;
-    letter-spacing: .5px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .albumAno{
     min-width: 200px;
-    letter-spacing: .5px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 p{
@@ -450,8 +484,16 @@ p{
     margin-bottom: .9%;
 }
 
+.artistBoxLink{
+    padding: 0%;
+    width: 19%;
+    text-decoration: none;
+    color: black;
+    margin-bottom: .9%;
+}
+
 .boxLink .albumInfo{
-    height: 80px;
+    height: 60px;
 }
 
 .boxLink:hover .box{
@@ -461,14 +503,6 @@ p{
 .boxLink .box{
     width: 100%;
     height: 100%;
-}
-
-.card{
-    background-color: var(--primary-color-light)!important;
-}
-
-.card-title, .card-text{
-    color: var(--text-color);
 }
 
 /* ALBUM PAGE */

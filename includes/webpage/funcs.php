@@ -132,9 +132,10 @@ class Album{
             $ano = $row["ano_al"];
             $img = $row["image_al"];
 
+            // file_exists('media/'.$img.'')
             echo '<a class="boxLink" href="album.php?ida='.$id.'">';
             echo '<div class="box">';
-            if(file_exists('media/'.$img.'')){
+            if($img != NULL){
                 echo '<img class="songImg" src="media/'.$img.'" alt="'.$titulo.'">';
             }
             else{
@@ -157,9 +158,10 @@ class Album{
             $ano = $row["ano_al"];
             $nome_a = $row["nome_a"];
             $img = $row["image_al"];
-
+            
+            // file_exists('media/'.$img.'')
             echo '<div id="banner" class="album_banner">';
-            if(file_exists('media/'.$img.'')){
+            if($img != NULL){
                 echo '<img id="songImg" class="songImg" src="media/'.$img.'" alt="'.$titulo.'">';
             }
             else{
@@ -312,11 +314,11 @@ class Artista{
         return $dados;
     }
 
-    public function listarAlbumInfo(){
+    public function listarArtistaInfo(){
         $ida = $_GET['ida'];
 
-        $sql = "SELECT *, nome_a FROM album
-                LEFT JOIN artista ON artista.id_a = artista_id_a
+        $sql = "SELECT *, nome_al FROM artista
+                LEFT JOIN album ON id_a = album.artista_id_a
                 WHERE id_al = ?";
         
         $res = $this->conexao->prepare($sql);
@@ -329,37 +331,41 @@ class Artista{
         foreach ($res as $row) {
             $id = $row["id_a"];
             $artist = $row["nome_a"];
-
+            $artistImg = $row["image_a"];
+            
+            // file_exists('media/artists/'.$artistImg.'')
+            echo '<a class="artistBoxLink" href="#">';
             echo '<div class="card" style="width: 18rem;">';
-            echo '    <img class="card-img-top" src="media/default-album-art.jpg" alt="Card image cap">';
+            if($artistImg != NULL){
+                echo '<img id="songImg" class="card-img-top" src="media/artists/'.$artistImg.'" alt="'.$artist.'">';
+            }
+            else{
+                echo '<img class="card-img-top" src="media/default-album-art.jpg" alt="default album cover">';
+            }
             echo '    <div class="card-body">';
             echo '        <h5 class="card-title">'.$artist.'</h5>';
-            echo '        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the cards content.</p>';
             echo '    </div>';
             echo '</div>';
+            echo '</a>';
         }
     }
 
-    public function mostrarInfo($res){
+    public function mostrarInfoArtista($res){
         foreach ($res as $row) {
-            $id = $row["id_al"];
-            $titulo = $row["nome_al"];
-            $ano = $row["ano_al"];
-            $nome_a = $row["nome_a"];
-            $img = $row["image_al"];
-
-            echo '<div id="banner" class="album_banner">';
-            if(file_exists('media/'.$img.'')){
-                echo '<img id="songImg" class="songImg" src="media/'.$img.'" alt="'.$titulo.'">';
+            $id = $row["id_a"];
+            $artist = $row["nome_a"];
+            $artistImg = $row["image_a"];
+            
+            // file_exists('media/artists/'.$artistImg.'')
+            echo '<div class="album_banner">';
+            if($artistImg != ""){
+                echo '<img id="songImg" class="card-img-top" src="media/artists/'.$artistImg.'" alt="'.$artist.'">';
             }
             else{
-                echo '<img class="songImg" src="media/default-album-art.jpg" alt="default album cover">';
+                echo '<img class="card-img-top" src="media/default-album-art.jpg" alt="default album cover">';
             }
             echo    '<div class="albumInfo">';
-            echo        '<p class="albumTitle">'.$titulo.'</p>';
-            echo        '<p class="albumAno">'.$nome_a.' • '.$ano.' • '.count($row).' MUSICAS • ';
-                            // AlbmGenre($row["id_al"]);
-            echo        '</p>';
+            echo        '<p class="albumTitle">'.$artist.'</p>';
             echo    '</div>';
             echo '</div>';
             echo '<br>';
