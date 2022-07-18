@@ -11,6 +11,9 @@
     --topbar-height: 60px;
 
     
+    /* FIREBOX SCROLLBAR */
+    scrollbar-width: thin;
+    scrollbar-color: rgba(90, 90, 90) rgba(0, 0, 0, 0.2);
 }
 
 /* SIDEBAR SHIZ */
@@ -141,7 +144,7 @@ body{
     padding: 10px 14px;
     background: var(--sidebar-color);
     transition: var(--tran-05);
-    z-index: 100;  
+    /* z-index: 100;   */
 }
 
 .sidebar.close{
@@ -249,6 +252,10 @@ body.dark .sidebar li a:hover .text{
     flex-direction: column;
     justify-content: space-between;
     overflow-y: scroll;
+
+    /* FIREFOX */
+    overflow-x: hidden;
+    scrollbar-width: none;
 }
 
 .menu-bar::-webkit-scrollbar{
@@ -394,7 +401,7 @@ body.dark .switch::before{
     width: 23%;
 }
 
-.songInfo{
+.songInfo, .albumInfo{
     margin-left: 10px;
     height: 100%;
     display: flex;
@@ -403,13 +410,30 @@ body.dark .switch::before{
     color: var(--text-color);
 }
 
-.songTitle{
-    width: 200px;
-    font-weight: bold;
-    font-size: larger;
+.albumInfo{
+    margin-top: auto;
+    margin-bottom: auto;
+}
+
+.albumTitle{
+    /* min-width: 200px; */
+    font-size: large;
+    font-weight: bolder;
+    text-transform: uppercase;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    letter-spacing: .5px;
+}
+
+.albumArts{
+    min-width: 200px;
+    font-size: large;
+    letter-spacing: .5px;
+}
+
+.albumAno{
+    min-width: 200px;
     letter-spacing: .5px;
 }
 
@@ -426,7 +450,7 @@ p{
     margin-bottom: .9%;
 }
 
-.boxLink .songInfo{
+.boxLink .albumInfo{
     height: 80px;
 }
 
@@ -437,6 +461,14 @@ p{
 .boxLink .box{
     width: 100%;
     height: 100%;
+}
+
+.card{
+    background-color: var(--primary-color-light)!important;
+}
+
+.card-title, .card-text{
+    color: var(--text-color);
 }
 
 /* ALBUM PAGE */

@@ -101,7 +101,9 @@ class Album{
 
     public function listarAlbum(){
         // sql shenenigans
-        $sql = "SELECT * FROM album ORDER BY nome_al ASC";
+        // $sql = "SELECT * FROM album ORDER BY nome_al ASC";
+        $sql = "SELECT *, nome_a FROM album
+                LEFT JOIN artista ON artista.id_a = artista_id_a";
         $conn = $this->conexao;
         // $sql = "SELECT titulo_m, nome_al, ano_al FROM musica RIGHT JOIN album ON musica.album_id_al = album.id_al ORDER BY titulo_m ASC";
         $result = $conn -> query($sql);
@@ -126,6 +128,7 @@ class Album{
         foreach ($res as $row) {
             $id = $row["id_al"];
             $titulo = $row["nome_al"];
+            $artist = $row["nome_a"];
             $ano = $row["ano_al"];
             $img = $row["image_al"];
 
@@ -137,8 +140,10 @@ class Album{
             else{
                 echo '<img class="songImg" src="media/default-album-art.jpg" alt="default album cover">';
             }
-            echo    '<div class="songInfo">';
-            echo        '<p class="songTitle" title="'.$titulo.'">'.$titulo.'</p>';
+            echo    '<div class="albumInfo">';
+            echo        '<p class="albumTitle" title="'.$titulo.'">'.$titulo.'</p>';
+            echo        '<p class="albumArts">'.$artist.'</p>';
+            echo        '<p class="albumAno">'.$ano.'</p>';
             echo    '</div>';
             echo '</div>';
             echo '</a>';
@@ -272,17 +277,163 @@ class Songs{
             $titulo = $row["titulo_m"];
             
             echo '<div class="musicShow">';                 
-                echo    '<div class="songInfo">';
-                echo        '<p class="songTitle">'.$titulo.'</p>';
-                echo        '<p class="songYear">NOME';
-                echo        '</p>';
-                echo    '</div>';
+            echo    '<div class="songInfo">';
+            echo        '<p class="songTitle">'.$titulo.'</p>';
+            echo        '<p class="songYear">NOME';
+            echo        '</p>';
+            echo    '</div>';
             echo '</div>';
         }
     }
 }
 
+class Artista{
+    private $conexao;
+    public function __construct(){
+        $pdo = new Bd;
+        $con = $pdo->getPDO();
+        $this->conexao = $con;
+        unset($pdo);
+    }
 
+    public function fechaConn(){
+        unset($this->conexao_al);
+    }
+
+    public function listarArtista(){
+        // sql shenenigans
+        // $sql = "SELECT * FROM album ORDER BY nome_al ASC";
+        $sql = "SELECT * FROM artista LIMIT 5";
+
+        $conn = $this->conexao;
+        // $sql = "SELECT titulo_m, nome_al, ano_al FROM musica RIGHT JOIN album ON musica.album_id_al = album.id_al ORDER BY titulo_m ASC";
+        $result = $conn -> query($sql);
+        $dados = $result->fetchAll();
+        return $dados;
+    }
+
+    public function listarAlbumInfo(){
+        $ida = $_GET['ida'];
+
+        $sql = "SELECT *, nome_a FROM album
+                LEFT JOIN artista ON artista.id_a = artista_id_a
+                WHERE id_al = ?";
+        
+        $res = $this->conexao->prepare($sql);
+        $res->execute([$ida]);
+        $dados = $res->fetchAll();
+        return $dados;
+    }
+
+    public function mostrarArtista($res){
+        foreach ($res as $row) {
+            $id = $row["id_a"];
+            $artist = $row["nome_a"];
+
+            echo '<div class="card" style="width: 18rem;">';
+            echo '    <img class="card-img-top" src="media/default-album-art.jpg" alt="Card image cap">';
+            echo '    <div class="card-body">';
+            echo '        <h5 class="card-title">'.$artist.'</h5>';
+            echo '        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the cards content.</p>';
+            echo '    </div>';
+            echo '</div>';
+        }
+    }
+
+    public function mostrarInfo($res){
+        foreach ($res as $row) {
+            $id = $row["id_al"];
+            $titulo = $row["nome_al"];
+            $ano = $row["ano_al"];
+            $nome_a = $row["nome_a"];
+            $img = $row["image_al"];
+
+            echo '<div id="banner" class="album_banner">';
+            if(file_exists('media/'.$img.'')){
+                echo '<img id="songImg" class="songImg" src="media/'.$img.'" alt="'.$titulo.'">';
+            }
+            else{
+                echo '<img class="songImg" src="media/default-album-art.jpg" alt="default album cover">';
+            }
+            echo    '<div class="albumInfo">';
+            echo        '<p class="albumTitle">'.$titulo.'</p>';
+            echo        '<p class="albumAno">'.$nome_a.' • '.$ano.' • '.count($row).' MUSICAS • ';
+                            // AlbmGenre($row["id_al"]);
+            echo        '</p>';
+            echo    '</div>';
+            echo '</div>';
+            echo '<br>';
+        }
+    }
+
+    public function addAlbum(){
+        $addArray=[
+            'nome_al'       => $_POST['Mtitulo'],
+            'ano_al'        => $_POST['Aano']
+            ];
+
+        $sql = "INSERT INTO album (nome_al, ano_al) VALUES (:nome_al, :ano_al)";
+        $conn = $this->conexao;
+        $result = $conn->prepare($sql);
+        $res = $result->execute($addArray);
+
+        /* verificar o sucesso na inserçao dos dados na BD*/
+        if($res === TRUE){
+            header("location:index.php?alerta=1");
+        }else{
+            header("location:index.php?alerta=0");
+        }
+    }
+
+    public function formEditar(){
+        $conexao = $this->conexao;
+
+        $idc= $_GET['idc'];  // colocar o id do URL numa variavel local
+        $sql="SELECT * FROM album WHERE id_al=?";
+        /* enviar a instruçao para a BD*/
+        $resultado = $conexao->prepare($sql);
+        $resultado->execute([$idc]);
+        $registo = $resultado->fetchAll();
+        
+        // passar os elementos do array p variaveis
+        $arrayDados=[
+            "nome"      => $registo[0]['nome_al'],
+            "ano"       => $registo[0]['ano_al'],
+        ];
+        return $arrayDados;
+    }
+
+    public function editarAlbum(){
+        $conexao = $this->conexao;
+
+        $arrDados=[
+            "titulo" => $_POST["Mtitulo"], 
+            "artista" => $_POST["Martist"], 
+            "album" => $_POST["Malbum"],
+            "ano" => $_POST["Mano"],
+            "id_a" => $_GET['ida']
+        ];
+        
+
+        $sql = "UPDATE album SET nome_al=:titulo,ano_al=:ano WHERE id_al = :id_a";
+        $stmt = $conexao->prepare($sql);
+        $res = $stmt->execute($arrDados);
+
+        if($res === TRUE){
+            $fdb = 1;
+            header('location: album.php?ida=:id_a&alerta='.$fdb);
+        }
+        else {
+            $fdb = 0;
+            header("location: erro.php?alerta=".$fdb);
+        }
+    }
+
+    public function removerAlbum()
+    {
+        # code...
+    }
+}
 
 
 

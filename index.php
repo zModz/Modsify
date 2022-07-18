@@ -3,6 +3,9 @@
 
     $a = new Album;
     $res = $a->listarAlbum();
+
+    $ar = new Artista;
+    $resAr = $ar->ListarArtista();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -17,6 +20,15 @@
                 $a->mostrarAlbuns($res);
             ?>
         </div>
+        <h1 class="pageTitle">ARTISTAS POPULARES</h1>
+        <div class="artistDisplay">
+            <?php
+                $ar->mostrarArtista($resAr);
+            ?>
+        </div>
     </div>
+    <?php
+        include("includes/webpage/footer.php");
+    ?>
 </body>
 </html>
