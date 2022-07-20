@@ -1,11 +1,11 @@
 <?php 
     require_once("includes/webpage/funcs.php");
-
+    $msgLog = "";
     $a = new User;
     
     /* verificar se estamos a receber os dados do formulario */
     if($_SERVER['REQUEST_METHOD']=='POST' && isset($_POST["fuser"])){
-        $msgLog = $a->user_verify($_POST["fuser"]);    
+        $msgLog = $a->login();    
     }    
 ?>
 
@@ -26,7 +26,7 @@
                     </td>
                 </tr>
                 <tr>
-                    <td colspan="3"><?php $msgLog ?></td>
+                    <td colspan="3"><?php echo $msgLog ?></td>
                 </tr>
             </table>
         </form>

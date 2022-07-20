@@ -1,8 +1,9 @@
 <?php 
     include("includes/webpage/funcs.php");
+    session_start();
 
     $a = new Album;
-    $res = $a->listarAlbum();
+    $res = $a->listarAlbums();
 
     $ar = new Artista;
     $resAr = $ar->ListarArtista();
