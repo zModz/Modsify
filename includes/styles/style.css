@@ -483,12 +483,12 @@ body.dark .switch::before{
 
 .albumAno .artistLink{
     text-decoration: none;
-    color: white;
+    color: var(--text-color);
 }
 
 .albumAno .artistLink:hover{
     text-decoration: underline;
-    color: white;
+    color: var(--text-color);
 }
 
 p{
@@ -532,6 +532,11 @@ p{
 .boxLink .box{
     width: 100%;
     height: 100%;
+}
+
+.error{
+    font-size: larger;
+    color: red;
 }
 
 /* ALBUM PAGE */

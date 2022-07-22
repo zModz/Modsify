@@ -6,7 +6,7 @@ $a = new Album;
 $s = new Songs;
 
 $res = $a->listarAlbumInfo();
-$res2 = $s->listarSongs();
+$res2 = $s->listarSongsAlbum();
 
 ?>
 

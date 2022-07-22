@@ -50,6 +50,7 @@ Class User{
 
     public function Login(){
         $conexao=$this->conexao;
+        $error = 0;
 
         // passar p variaveis locais os dados do form de login
         $user=$_POST['fuser'];
@@ -71,13 +72,17 @@ Class User{
             if(password_verify($pass, $passBd)){
                 $_SESSION['user'] = $user;
                 $_SESSION['nivel'] = $nivel;
-                header("location:index.php");
             }else{
-                return "<p class='logP'>A password está incorreta</p>";
+                // return "<p class='logP'>A password está incorreta</p>";
+                $error = 1;
             }    
-        }else{
-            return "<p class='logP'>O utilizador $user não foi encontrado</p>";
         }
+        else{
+            // return "<p class='logP'>O utilizador $user não foi encontrado</p>";
+            $error = 2;
+        }
+
+        return $error;
     }
 
     public function adduser($username){
@@ -197,7 +202,7 @@ class Album{
             }
             echo    '<div class="albumInfo">';
             echo        '<p class="albumTitle">'.$titulo.'</p>';
-            echo        '<p class="albumAno"><a class="artistLink" href="artista.php?ida='.$id.'">'.$nome_a.'</a> • '.$ano.' • '.count($a->listarSongs()).' MUSICAS • ';
+            echo        '<p class="albumAno"><a class="artistLink" href="artista.php?ida='.$id.'">'.$nome_a.'</a> • '.$ano.' • '.count($a->listarSongsAlbum()).' MUSICAS • ';
                             // AlbmGenre($row["id_al"]);
             echo        '</p>';
             echo    '</div>';
@@ -393,7 +398,27 @@ class Songs{
         unset($this->conexao);
     }
 
-    public function listarSongs(){
+    protected function listarSongs($idmu)
+    {
+        $idm = $idmu;
+        $sqlUp = "SELECT id_m, artista.id_a, artista.nome_a FROM musica 
+                  LEFT JOIN musica_has_artista ON musica_id_m = musica.id_m 
+                  LEFT JOIN artista ON artista.id_a = musica_has_artista.artista_id_a
+                  WHERE id_m = ?";
+
+        $res = $this->conexao->prepare($sqlUp);
+        $res->execute([$idm]);
+
+        while($rowArt = $res->fetch()){
+            if($rowArt["id_a"] > 1 && $rowArt["id_m"] == $idm){
+                echo ", ".$rowArt["nome_a"];
+            }else{
+                echo $rowArt["nome_a"];
+            }
+        } 
+    }
+
+    public function listarSongsAlbum(){
         $ida = $_GET['ida'];
 
         $sql = "SELECT titulo_m, id_al, id_m FROM musica 
@@ -415,7 +440,8 @@ class Songs{
                 echo '<div class="musicShow">';                 
                 echo    '<div class="songInfo">';
                 echo        '<p class="songTitle">'.$titulo.'</p>';
-                echo        '<p class="songYear">NOME';
+                echo        '<p class="songYear">';
+                    $this->listarSongs($id);
                 echo        '</p>';
                 echo    '</div>';
                 echo '</div>';

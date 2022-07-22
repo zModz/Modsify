@@ -2,6 +2,8 @@
     include("includes/webpage/funcs.php");
     session_start();
 
+    $u = new User;
+
     $a = new Album;
     $res = $a->listarAlbums();
 

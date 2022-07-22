@@ -16,7 +16,7 @@
                 <a href="#" class="previous round" onclick="history.back();">&#8249;</a>
                 <a href="#" class="next round" onclick="history.forward();">&#8250;</a>
             </div>
-            
+            <?php include("loginRegister.php") ?>
         </div>
     </div>
     <div class="sidebar close">
@@ -38,38 +38,61 @@
 
                         <li class="nav-link">
                             <a href="#">
-                                <i class='bx bx-bar-chart-alt-2 icon' ></i>
-                                <span class="text nav-text">Revenue</span>
+                                <i class='bx bx-album icon'></i>
+                                <span class="text nav-text">Albums</span>
                             </a>
                         </li>
 
                         <li class="nav-link">
                             <a href="#">
-                                <i class='bx bx-bell icon'></i>
-                                <span class="text nav-text">Notifications</span>
+                                <i class='bx bx-music icon'></i>
+                                <span class="text nav-text">Songs</span>
                             </a>
                         </li>
 
                         <li class="nav-link">
                             <a href="#">
-                                <i class='bx bx-pie-chart-alt icon' ></i>
-                                <span class="text nav-text">Analytics</span>
+                                <i class='bx bx-face icon'></i>
+                                <span class="text nav-text">Artistas</span>
                             </a>
                         </li>
+                    <?php 
+                        if(isset($_SESSION["user"]))
+                        {
+                            echo "
+                                <li class='nav-link'>
+                                    <div class='dropdown-divider'></div>
+                                </li>
 
-                        <li class="nav-link">
-                            <a href="#">
-                                <i class='bx bx-heart icon' ></i>
-                                <span class="text nav-text">Likes</span>
-                            </a>
-                        </li>
+                                <li class='nav-link'>
+                                    <a href='#'>
+                                        <i class='bx bx-plus-circle icon'></i>
+                                        <span class='text nav-text'>Adicionar Albums</span>
+                                    </a>
+                                </li>
 
-                        <li class="nav-link">
-                            <a href="#">
-                                <i class='bx bx-wallet icon' ></i>
-                                <span class="text nav-text">Wallets</span>
-                            </a>
-                        </li>
+                                <li class='nav-link'>
+                                    <a href='#'>
+                                        <i class='bx bx-plus-circle icon'></i>
+                                        <span class='text nav-text'>Adicionar Songs</span>
+                                    </a>
+                                </li>
+                                
+                                <li class='nav-link'>
+                                    <a href='#'>
+                                        <i class='bx bx-plus-circle icon'></i>
+                                        <span class='text nav-text'>Adicionar Artistas</span>
+                                    </a>
+                                </li>
+                                
+                                <li class='nav-link'>
+                                    <a href='#'>
+                                        <i class='bx bx-plus-circle icon'></i>
+                                        <span class='text nav-text'>Adicionar Generos</span>
+                                    </a>
+                                </li>";
+                        }
+                    ?>
                 </ul>
                 <div class="bottom-content">
                     <li class="mode">
