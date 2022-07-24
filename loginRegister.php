@@ -12,7 +12,7 @@
 
 <!DOCTYPE html>
 <html>
-    <body>
+    <body class="dark">
     <?php
         if(isset($_SESSION['user'])){
             $user=$_SESSION['user'];
@@ -25,15 +25,15 @@
         <table id="logTab">
             <tr>
                 <td>
-                    <input type="text" class="logInput" name="fuser"';
+                    <input type="text" placeholder="Username" class="logInput" name="fuser"';
                     <?php if($error == "2"){ echo 'style="border:1px solid red;"'; } ?> required>
                 </td>
                 <td>
-                    <input type="password" class="logInput" name="fpass"';
+                    <input type="password" placeholder="Password" class="logInput" name="fpass"';
                     <?php if($error == "1"){ echo 'style="border:1px solid red;"'; } ?> required>
                 </td>
                 <td>
-                    <input type="submit" value="login">
+                    <input type="submit" value="Login">
                 </td>
                 <td>
                     <a href="loginRegister_2.php">Register</a>

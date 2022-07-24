@@ -5,13 +5,13 @@
     $u = new User;
 
     $a = new Album;
-    $res = $a->listarAlbumsHOME();
-
     $ar = new Artista;
-    $resAr = $ar->listarArtistaHOME();
-    
     $m = new Songs;
-    $resM = $m->listarSongsAllHOME();
+
+    $pesq = new Search;
+    $resAl = $pesq->searchResultsAlbum();
+    $resAr = $pesq->searchResultsArtista();
+    $resMu = $pesq->searchResultsSong();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -20,22 +20,22 @@
     <?php include("includes/webpage/navbar.php") ?>
     <div id="content">
         <div class="space">&nbsp;</div>
-        <h1 class="pageTitle">BEM-VINDO DE VOLTA!</h1>
+        <h1 class="pageTitle">ALBUMS</h1>
         <div class="musicDisplay">
             <?php 
-                $a->mostrarAlbuns($res);
+                $a->mostrarAlbumCard($resAl);
             ?>
         </div>
-        <h1 class="pageTitle">ARTISTAS POPULARES</h1>
+        <h1 class="pageTitle">ARTISTAS</h1>
         <div class="artistDisplay">
             <?php
                 $ar->mostrarArtista($resAr);
             ?>
         </div>
-        <h1 class="pageTitle">MUSICAS POPULARES</h1>
+        <h1 class="pageTitle">MUSICAS</h1>
         <div class="musicDisplay">
             <?php 
-                $m->mostrarSongsAll($resM);
+                $m->mostrarSongsAll($resMu);
             ?>
         </div>
     </div>

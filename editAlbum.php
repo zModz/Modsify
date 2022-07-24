@@ -14,10 +14,12 @@ if($_SERVER['REQUEST_METHOD']=='POST' && isset($_POST["Mtitulo"])){
 <!DOCTYPE html>
 <html lang="en">
 <?php include("includes/webpage/head.php"); ?>
-<body>
+<body class="dark">
+    <?php include("includes/webpage/navbar.php") ?>
     <!-- CONTENT -->
     <div id="content">
-      <div style="height: 60px; width: 100%;">&nbsp;</div>
+      <div class="space">&nbsp;</div>
+        <h1 class="pageTitle">EDITAR</h1>
       <?php
         if(isset($_GET['ida'])){   // verificar se estou a receber um id no URL 
           $dados = $a->formEditar();

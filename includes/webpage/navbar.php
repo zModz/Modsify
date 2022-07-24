@@ -23,10 +23,12 @@
         <div class="menu-bar">
             <div class="menu">
                 <ul>
-                    <li class="search-box">
-                        <i class='bx bx-search icon'></i>
-                        <input type="text" placeholder="Search...">
-                    </li>
+                    <form action="pesquisa.php" method="post">
+                        <li class="search-box">
+                            <i class='bx bx-search icon'></i>
+                            <input id="search" type="text" name="search" placeholder="Search...">
+                        </li>
+                    </form>
 
                     <ul class="menu-links">
                         <li class="nav-link">
@@ -37,21 +39,21 @@
                         </li>
 
                         <li class="nav-link">
-                            <a href="#">
+                            <a href="showAlbums.php">
                                 <i class='bx bx-album icon'></i>
                                 <span class="text nav-text">Albums</span>
                             </a>
                         </li>
 
                         <li class="nav-link">
-                            <a href="#">
+                            <a href="showSongs.php">
                                 <i class='bx bx-music icon'></i>
                                 <span class="text nav-text">Songs</span>
                             </a>
                         </li>
 
                         <li class="nav-link">
-                            <a href="#">
+                            <a href="showArtistas.php">
                                 <i class='bx bx-face icon'></i>
                                 <span class="text nav-text">Artistas</span>
                             </a>

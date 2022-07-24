@@ -133,11 +133,23 @@ class Album{
         unset($this->conexao_al);
     }
 
+    public function listarAlbumsHOME(){
+        // sql shenenigans
+        $sql = "SELECT *, nome_a FROM album
+                LEFT JOIN artista ON artista.id_a = artista_id_a
+                ORDER BY RAND() DESC LIMIT 6";
+
+        $conn = $this->conexao;
+        $result = $conn -> query($sql);
+        $dados = $result->fetchAll();
+        return $dados;
+    }
+
     public function listarAlbums(){
         // sql shenenigans
         $sql = "SELECT *, nome_a FROM album
                 LEFT JOIN artista ON artista.id_a = artista_id_a
-                ORDER BY nome_al DESC";
+                ORDER BY nome_al ASC";
 
         $conn = $this->conexao;
         $result = $conn -> query($sql);
@@ -244,6 +256,12 @@ class Album{
             echo        '<p class="albumAno"><a class="artistLink" href="artista.php?ida='.$id.'">'.$nome_a.'</a> • '.$ano.' • '.count($a->listarSongsAlbum()).' MUSICAS • ';
                             $this->listarAlbumGenero($ida);
             echo        '</p>';
+            if(isset($_SESSION['user'])){
+                echo        '<div class="albumBtns">';
+                echo            '<a class="alBtn" href="editAlbum.php?ida='.$row["id_al"].'">EDIT ALBUM</a>';
+                echo            '<a class="alBtn" href="removerAlbum.php?ida='.$row["id_al"].'" onclick="verificar(event);">REMOVE ALBUM</a>';
+                echo        '</div>';
+            }
             echo    '</div>';
             echo '</div>';
             echo '<br>';
@@ -307,9 +325,9 @@ class Album{
 
         /* verificar o sucesso na inserçao dos dados na BD*/
         if($res === TRUE && $res2 === TRUE){
-            header("location:index.php?alerta=1");
+            header("location: album.php?ida=".$albums."&alerta=0");
         }else{
-            header("location:index.php?alerta=0");
+            header("location: erro.php?alerta=1");
         }
     }
 
@@ -406,50 +424,34 @@ class Album{
         $res2 = $result3->execute($addArray2);
 
         if($res === TRUE && $res2 === TRUE){
-            $fdb = 1;
-            header('location: album.php?ida='.$ida.'&alerta='.$fdb);
+            header('location: album.php?ida='.$ida.'&alerta=0');
         }
         else {
-            $fdb = 0;
-            header("location: erro.php?alerta=".$fdb);
+            header("location: erro.php?alerta=2");
         }
     }
 
     public function removerAlbum()
     {
         $ida = $_GET['ida'];
-        $sqlrm = "DELETE FROM album WHERE id_al = ?";
+
+        $sqlrm = "DELETE FROM album_has_generos WHERE album_id_al = ?";
         $res = $this->conexao->prepare($sqlrm);
+
+        $sqlrm2 = "DELETE FROM album WHERE id_al = ?";
+        $res2 = $this->conexao->prepare($sqlrm2);
+
+
         $res->execute([$ida]);
+        $res2->execute([$ida]);
         
-        if($res === true){
-            $fdb = 1;
-            header("location: index.php?alerta=".$fdb);
+        if($res === true && $res2 === true){
+            header("location: showAlbums.php?alerta=0");
         }
         else{
-            $fdb = 0;
-            header("location: erro.php?alerta=".$fdb);  
+            header("location: erro.php?alerta=3");  
         }
     }
-}
-
-function uploadPhoto($dir, $name, $whatIs){
-    // Verificar se o formulário foi submetido
-    if($_SERVER['REQUEST_METHOD']=='POST'){
-        $name = str_replace(" ", "", $name);
-        $file = $_FILES[$whatIs]['tmp_name'];
-        
-        $fileType = strtolower(pathinfo($_FILES[$whatIs]['name'], PATHINFO_EXTENSION));
-        if($whatIs != NULL){
-            $novonome = $name. "." . $fileType;
-            $path = $dir . $novonome;
-        }
-
-        move_uploaded_file($file, $path);
-        return $novonome;
-    }
-
-    return "template";
 }
 
 #Songs
@@ -511,14 +513,87 @@ class Songs{
                 echo        '<p class="songYear">';
                     $this->listarSongsArtists($id);
                 echo        '</p>';
+                if(isset($_SESSION["user"])){
+                    echo        '<div class="songBtns">';
+                    echo            '<a class="sgBtn" href="editMusic.php?idm='.$row["id_m"].'">edit</a>';
+                    echo            '<a class="sgBtn" href="removerMusic.php?idm='.$row["id_m"].'&ida='.$row["id_al"].'" onclick="verificar(event);">remove</a>';
+                    echo        '</div>';
+                }
                 echo    '</div>';
                 echo '</div>';
             }
         }
         else{
             echo '<p class="error">NO RESULTS FOUND!</p>';
-        }
+        }   
+    }
+
+    public function listarSongsAllHOME(){
+        $sql = "SELECT * FROM musica
+                LEFT JOIN album ON album.id_al = musica.album_id_al
+                LEFT JOIN artista ON artista.id_a = album.artista_id_a
+                ORDER BY RAND()
+                LIMIT 12";
         
+        $res = $this->conexao->query($sql);
+        $dados = $res->fetchAll();
+
+        return $dados;
+    }
+
+    public function listarSongsAll(){
+        $sql = "SELECT * FROM musica
+                LEFT JOIN album ON album.id_al = musica.album_id_al
+                LEFT JOIN artista ON artista.id_a = album.artista_id_a
+                ORDER BY RAND()";
+        
+        $res = $this->conexao->query($sql);
+        $dados = $res->fetchAll();
+
+        return $dados;
+    }
+
+    public function listarSongsArtista(){
+        $idar = $_GET['ida'];
+
+        $sql = "SELECT * FROM musica
+                LEFT JOIN album ON album.id_al = musica.album_id_al
+                LEFT JOIN artista ON artista.id_a = album.artista_id_a
+                WHERE artista.id_a = ?";
+        
+        $res = $this->conexao->prepare($sql);
+        $res->execute([$idar]);
+        $dados = $res->fetchAll();
+
+        return $dados;
+    }
+
+    public function mostrarSongsAll($res){
+        foreach ($res as $row) {
+            $id = $row["id_al"];
+            $nome = $row["titulo_m"];
+            $titulo = $row["nome_al"];
+            $artist = $row["nome_a"];
+            $img = $row["image_al"];
+
+            // file_exists('media/'.$img.'')
+            echo '<a class="boxLink" href="album.php?ida='.$id.'">';
+            echo '<div class="box">';
+            if($img != NULL){
+                echo '<img class="songImg" src="media/'.$img.'" alt="'.$titulo.'">';
+            }
+            else{
+                echo '<img class="songImg" src="media/default-album-art.jpg" alt="default album cover">';
+            }
+            echo    '<div class="albumInfo">';
+            echo        '<p class="songTitle" title="'.$nome.'">'.$nome.'</p>';
+            echo        '<p class="songAlbum">'.$titulo.'</p>';
+            echo        '<p class="songArtist">'.$artist.'</p>';
+            echo    '</div>';
+            echo '</div>';
+            echo '</a>';
+        }
+        echo '<p class="boxLink"></p>';
     }
 
     public function addSong(){
@@ -550,9 +625,9 @@ class Songs{
 
         /* verificar o sucesso na inserçao dos dados na BD*/
         if($res === TRUE && $res2 === TRUE){
-            header("location:album.php?ida='.$al.'&alerta=1");
+            header("location:album.php?ida='.$al.'&alerta=0");
         }else{
-            header("location:erro.php?alerta=0");
+            header("location:erro.php?alerta=1");
         }
     }
 
@@ -635,10 +710,10 @@ class Songs{
         $res2 = $result3->execute($addArray2);
 
         if($res === TRUE && $res2 === TRUE){
-            header('location: album.php?ida='.$ida.'&alerta=1');
+            header('location: album.php?ida='.$ida.'&alerta=0');
         }
         else {
-            header("location: erro.php?alerta=0");
+            header("location: erro.php?alerta=2");
         }
     }
 
@@ -654,11 +729,11 @@ class Songs{
         $res->execute([$idm]);
         $res2->execute([$idm]);
         
-        if($res === true){
-            header('location: album.php?ida='.$ida.'&alerta=1');
+        if($res === true && $res2 === true){
+            header('location: album.php?ida='.$ida.'&alerta=0');
         }
         else{
-            header("location: erro.php?alerta=0");  
+            header("location: erro.php?alerta=3");  
         }
     }
 }
@@ -675,6 +750,16 @@ class Artista{
 
     public function fechaConn(){
         unset($this->conexao_al);
+    }
+
+    public function listarArtistaHOME(){
+        // sql shenenigans
+        $sql = "SELECT * FROM artista ORDER BY RAND() LIMIT 5"; #WHERE image_a REGEXP '^[a-zA-Z]'
+
+        $conn = $this->conexao;
+        $result = $conn -> query($sql);
+        $dados = $result->fetchAll();
+        return $dados;
     }
 
     public function listarArtista(){
@@ -729,15 +814,21 @@ class Artista{
             $artistImg = $row["image_a"];
             
             // file_exists('media/artists/'.$artistImg.'')
-            echo '<div class="album_banner">';
+            echo '<div id="banner" class="album_banner">';
             if($artistImg != NULL){
-                echo '<img class="songImg" src="media/artists/'.$artistImg.'" alt="'.$artist.'">';
+                echo '<img id="songImg" class="songImg" src="media/artists/'.$artistImg.'" alt="'.$artist.'">';
             }
             else{
                 echo '<img class="songImg" src="media/default-album-art.jpg" alt="default album cover">';
             }
             echo    '<div class="albumInfo">';
             echo        '<p class="albumTitle">'.$artist.'</p>';
+            if(isset($_SESSION['user'])){
+                echo        '<div class="albumBtns">';
+                echo            '<a class="alBtn" href="editArtista.php?ida='.$row["id_a"].'">EDIT ARTISTA</a>';
+                echo            '<a class="alBtn" href="removerArtista.php?ida='.$row["id_a"].'" onclick="verificar(event);">REMOVE ARTISTA</a>';
+                echo        '</div>';
+            }
             echo    '</div>';
             echo '</div>';
             echo '<br>';
@@ -759,9 +850,9 @@ class Artista{
 
         /* verificar o sucesso na inserçao dos dados na BD*/
         if($res === TRUE){
-            header("location:index.php?alerta=1");
-        }else{
             header("location:index.php?alerta=0");
+        }else{
+            header("location:index.php?alerta=1");
         }
     }
 
@@ -815,12 +906,10 @@ class Artista{
         $res = $stmt->execute($arrDados);
 
         if($res === TRUE){
-            $fdb = 1;
-            header('location: artista.php?ida='.$ida.'&alerta='.$fdb);
+            header('location: artista.php?ida='.$ida.'&alerta=0');
         }
         else {
-            $fdb = 0;
-            header("location: erro.php?alerta=".$fdb);
+            header("location: erro.php?alerta=2");
         }
     }
 
@@ -832,17 +921,15 @@ class Artista{
         $res->execute([$ida]);
         
         if($res === true){
-            $fdb = 1;
-            header("location: index.php?alerta=".$fdb);
+            header("location: showArtistas.php?alerta=0");
         }
         else{
-            $fdb = 0;
-            header("location: erro.php?alerta=".$fdb);  
+            header("location: erro.php?alerta=3");  
         }
     }
 }
 
-#Songs
+#Generos
 class Generos{
     private $conexao;
     public function __construct(){
@@ -896,9 +983,9 @@ class Generos{
         
         /* verificar o sucesso na inserçao dos dados na BD*/
         if($res === TRUE){
-            header("location:index.php?alerta=1");
+            header("location:index.php?alerta=0");
         }else{
-            header("location:erro.php?alerta=0");
+            header("location:erro.php?alerta=1");
         }
     }
 
@@ -945,10 +1032,10 @@ class Generos{
         $res = $stmt->execute($arrDados);
         
         if($res === TRUE){
-            header('location: index.php?alerta=1');
+            header('location: index.php?alerta=0');
         }
         else {
-            header("location: erro.php?alerta=0");
+            header("location: erro.php?alerta=2");
         }
     }
 
@@ -960,11 +1047,107 @@ class Generos{
         $res->execute([$idg]);
         
         if($res === true){
-            header('location: index.php?alerta=1');
+            header('location: index.php?alerta=0');
         }
         else{
-            header("location: erro.php?alerta=0");  
+            header("location: erro.php?alerta=3");  
         }
+    }
+}
+
+#Pesquisa
+class Search{
+    private $conexao;
+    public function __construct(){
+        $pdo = new Bd;
+        $con = $pdo->getPDO();
+        $this->conexao = $con;
+        unset($pdo);
+    }
+
+    public function fechaConn(){
+        unset($this->conexao);
+    }
+
+    public function searchResultsAlbum(){
+        $searchQuery = $_POST["search"];
+        $conn = $this->conexao;
+
+        $sql = "SELECT * FROM album WHERE nome_al = ?";
+        $res = $conn->prepare($sql);
+        $res->execute([$searchQuery]);
+        $dados = $res->fetchAll();
+
+        return $dados;
+    }
+
+    public function searchResultsSong(){
+        $searchQuery = $_POST["search"];
+        $conn = $this->conexao;
+
+        $sql = "SELECT * FROM musica 
+                LEFT JOIN album ON album.id_al = musica.album_id_al
+                LEFT JOIN artista ON artista.id_a = album.artista_id_a
+                WHERE titulo_m = ?";
+            
+        $res = $conn->prepare($sql);
+        $res->execute([$searchQuery]);
+        $dados = $res->fetchAll();
+
+        return $dados;
+    }
+
+    public function searchResultsArtista(){
+        $searchQuery = $_POST["search"];
+        $conn = $this->conexao;
+
+        $sql = "SELECT * FROM artista WHERE nome_a = ?";
+        $res = $conn->prepare($sql);
+        $res->execute([$searchQuery]);
+        $dados = $res->fetchAll();
+
+        return $dados;
+    }
+}
+
+#FUNCTIONS
+function uploadPhoto($dir, $name, $whatIs){
+    // Verificar se o formulário foi submetido
+    if($_SERVER['REQUEST_METHOD']=='POST'){
+        $name = str_replace(" ", "", $name);
+        $file = $_FILES[$whatIs]['tmp_name'];
+        
+        $fileType = strtolower(pathinfo($_FILES[$whatIs]['name'], PATHINFO_EXTENSION));
+        if($whatIs != NULL){
+            $novonome = $name. "." . $fileType;
+            $path = $dir . $novonome;
+        }
+
+        move_uploaded_file($file, $path);
+        return $novonome;
+    }
+
+    return "template";
+}
+
+function errorGen($e){
+    switch($e){
+        case 1:
+            echo "<h2 style='width: 99%; color: var(--text-color);'>ERRO: ADICIONAR FALHOU!</h2>";
+            echo "<p style='width: 99%; color: var(--text-color);'>Contacte o admin se o problema presistir!</p>";
+            break;
+        case 2:
+            echo "<h2 style='width: 99%; color: var(--text-color);'>ERRO: EDITAR FALHOU!</h2>";
+            echo "<p style='width: 99%; color: var(--text-color);'>Contacte o admin se o problema presistir!</p>";
+            break;
+        case 3:
+            echo "<h2 style='width: 99%; color: var(--text-color);'>ERRO: REMOVER FALHOU!</h2>";
+            echo "<p style='width: 99%; color: var(--text-color);'>Contacte o admin se o problema presistir!</p>";
+            break;
+        default:
+            echo "<h2 style='width: 99%; color: var(--text-color);'>ERRO: CRITICO</h2>";
+            echo "<p style='width: 99%; color: var(--text-color);'>Se estiver a ver este erro, contacte o admin de imediato!</p>";
+            break;
     }
 }
 

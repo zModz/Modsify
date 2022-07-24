@@ -4,9 +4,11 @@ include("includes/webpage/funcs.php");
 
 $ar = new Artista;
 $a = new Album;
+$m = new Songs;
 
 $resAr = $ar->ListarArtistaInfo();
 $res = $a->listarAlbumArtista();
+$resM = $m->listarSongsArtista();
 
 ?>
 
@@ -27,6 +29,11 @@ $res = $a->listarAlbumArtista();
                 <?php $a->mostrarAlbumCard($res); ?>
             </div>
             <h1 style="color: var(--text-color);">MUSICAS</h1>
+            <div class="musicDisplay">
+            <?php 
+                $m->mostrarSongsAll($resM);
+            ?>
+        </div>
         </div>
     </div>
 </body>

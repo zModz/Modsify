@@ -19,13 +19,13 @@ if($_SERVER['REQUEST_METHOD']==='POST' && isset($_POST["gNome"])){
 <!DOCTYPE html>
 <html lang="en">
 <?php include("includes/webpage/head.php"); ?>
-<body>
+<body class="dark">
   <!-- NAV -->
     <?php include("includes/webpage/navbar.php") ?>
     <!-- CONTENT -->
     <div id="content">
-        <div style="height: 60px; width: 100%;">&nbsp;</div>
-        <h1 class="pageTitle">INSERIR</h1>
+        <div class="space">&nbsp;</div>
+        <h1 class="pageTitle">EDITAR</h1>
         <?php 
             $g->formEditar();
         ?>
