@@ -17,6 +17,7 @@ if($_SERVER['REQUEST_METHOD']=='POST' && isset($_POST["Mtitulo"])){
 <body>
     <!-- CONTENT -->
     <div id="content">
+      <div style="height: 60px; width: 100%;">&nbsp;</div>
       <?php
         if(isset($_GET['ida'])){   // verificar se estou a receber um id no URL 
           $dados = $a->formEditar();

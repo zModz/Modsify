@@ -2,14 +2,16 @@
 session_start();
 require_once("includes/webpage/funcs.php");
 
-// if(!$_SESSION["user"]){
-//   header("erro.php");
-// }
+if(!isset($_SESSION["user"])){
+  header("erro.php");
+}
 
 
 $a = new Album;
 $ar = new Artista;
+$g = new Generos;
 $resAr = $ar->listarArtista();
+$resG = $g->listarGeneros();
 /* verificar se estamos a receber os dados do formulario */
 if($_SERVER['REQUEST_METHOD']=='POST' && isset($_POST["Mtitulo"])){
   $res = $a->addAlbum();
@@ -50,7 +52,19 @@ if($_SERVER['REQUEST_METHOD']=='POST' && isset($_POST["Mtitulo"])){
             </tr>
             <tr>
               <td>Capa do album: </td>
-              <td><input type="file" name="cover"> </td>
+              <td><input type="file" name="cover" required> </td>
+            </tr>
+            <tr>
+              <td>Genero: </td>
+              <td>
+                <select name="generoDrop" id="dropGenero" required>
+                  <?php 
+                    foreach($resG as $row){
+                      echo '<option value="'.$row["id_g"].'">'.$row["nome_g"].'</option>';
+                    }
+                  ?>
+                </select> 
+              </td>
             </tr>
             <tr>
               <td></td>

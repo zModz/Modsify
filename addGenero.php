@@ -6,12 +6,12 @@ if(!$_SESSION["user"]){
   header("erro.php");
 }
 
-$ar = new Artista;
+$g = new Generos;
 
 
 // sql insert inserts the things to insert
-if($_SERVER['REQUEST_METHOD']==='POST' && isset($_POST["arNome"])){  
-  $res = $ar->addArtista();
+if($_SERVER['REQUEST_METHOD']==='POST' && isset($_POST["gNome"])){  
+  $res = $g->addGeneros();
 }
 
 ?>
@@ -29,12 +29,8 @@ if($_SERVER['REQUEST_METHOD']==='POST' && isset($_POST["arNome"])){
         <form action="" method="post" enctype="multipart/form-data">
           <table id="formTab">
             <tr>
-              <td>Nome do Artista: </td>
-              <td><input type="text" name="arNome" required> </td>
-            </tr>
-            <tr>
-              <td>Imagem do artista: </td>
-              <td><input type="file" name="img"> </td>
+              <td>Nome do Genero: </td>
+              <td><input type="text" name="gNome" required> </td>
             </tr>
             <tr>
               <td> </td>

@@ -30,7 +30,7 @@
 
                     <ul class="menu-links">
                         <li class="nav-link">
-                            <a href="#">
+                            <a href="index.php">
                                 <i class='bx bx-home-alt icon' ></i>
                                 <span class="text nav-text">Dashboard</span>
                             </a>
@@ -65,28 +65,28 @@
                                 </li>
 
                                 <li class='nav-link'>
-                                    <a href='#'>
+                                    <a href='addAlbum.php'>
                                         <i class='bx bx-plus-circle icon'></i>
                                         <span class='text nav-text'>Adicionar Albums</span>
                                     </a>
                                 </li>
 
                                 <li class='nav-link'>
-                                    <a href='#'>
+                                    <a href='addMusic.php'>
                                         <i class='bx bx-plus-circle icon'></i>
                                         <span class='text nav-text'>Adicionar Songs</span>
                                     </a>
                                 </li>
                                 
                                 <li class='nav-link'>
-                                    <a href='#'>
+                                    <a href='addArtista.php'>
                                         <i class='bx bx-plus-circle icon'></i>
                                         <span class='text nav-text'>Adicionar Artistas</span>
                                     </a>
                                 </li>
                                 
                                 <li class='nav-link'>
-                                    <a href='#'>
+                                    <a href='addGenero.php'>
                                         <i class='bx bx-plus-circle icon'></i>
                                         <span class='text nav-text'>Adicionar Generos</span>
                                     </a>
