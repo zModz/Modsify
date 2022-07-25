@@ -308,10 +308,7 @@ class Album{
         $conn = $this->conexao;
         $result = $conn->prepare($sql);
 
-        $sql2 = "SELECT * FROM album";
-        $result2 = $conn->query($sql2);
-        $albumArr = $result2->fetchAll();
-        $albums = count($albumArr) + 2;
+        $albums = 0;
         $addArray2=[
             'albums'     => $albums,
             'id_g'      => $_POST['generoDrop'],
@@ -320,14 +317,19 @@ class Album{
         $sqlArtist = "INSERT INTO album_has_generos (album_id_al, generos_id_g) VALUES (:albums, :id_g)";
         $result3 = $conn->prepare($sqlArtist);
 
-        $res = $result->execute($addArray);
-        $res2 = $result3->execute($addArray2);
-
-        /* verificar o sucesso na inserçao dos dados na BD*/
-        if($res === TRUE && $res2 === TRUE){
-            header("location: album.php?ida=".$albums."&alerta=0");
-        }else{
-            header("location: erro.php?alerta=1");
+        try{
+            $conn->beginTransaction();
+            $result->execute($addArray);
+            $id = $conn->lastInsertId();
+            $addArray2["albums"] = $id;
+            $result3->execute($addArray2);
+            
+            $conn->commit();
+            header("location: album.php?ida=".$id."&alerta=0");
+        }
+        catch(PDOException $e){
+            $conn->rollBack();
+            header("location:erro.php?alerta=1");
         }
     }
 
@@ -413,7 +415,7 @@ class Album{
         $stmt = $conexao->prepare($sql);
 
         $addArray2=[
-            'id_g'  => $_POST['generoDrop'],
+            'id_g'        => $_POST['generoDrop'],
             "id_al"       => $_GET['ida']
         ];
         
@@ -441,14 +443,16 @@ class Album{
         $sqlrm2 = "DELETE FROM album WHERE id_al = ?";
         $res2 = $this->conexao->prepare($sqlrm2);
 
-
-        $res->execute([$ida]);
-        $res2->execute([$ida]);
-        
-        if($res === true && $res2 === true){
+        try{
+            $this->conexao->beginTransaction();
+            $res->execute([$ida]);
+            $res2->execute([$ida]);
+            
+            $this->conexao->commit();
             header("location: showAlbums.php?alerta=0");
         }
-        else{
+        catch(PDOException $e){
+            $this->conexao->rollBack();
             header("location: erro.php?alerta=3");  
         }
     }
@@ -481,7 +485,7 @@ class Songs{
 
         while($rowArt = $res->fetch()){
             if($rowArt["id_a"] > 1 && $rowArt["id_m"] == $idm){
-                echo ", ".$rowArt["nome_a"];
+                echo " ".$rowArt["nome_a"];
             }else{
                 echo $rowArt["nome_a"];
             }
@@ -608,10 +612,7 @@ class Songs{
         $conn = $this->conexao;
         $result = $conn->prepare($sqlSong);
         
-        $sql2 = "SELECT * FROM musica";
-        $result2 = $conn->query($sql2);
-        $songArr = $result2->fetchAll();
-        $songs = count($songArr) + 2;
+        $songs = 0;
         $addArray2=[
             'songs'     => $songs,
             'artist_s'  => $_POST['artistDrop']  
@@ -619,14 +620,19 @@ class Songs{
         
         $sqlArtist = "INSERT INTO musica_has_artista (musica_id_m, artista_id_a) VALUES (:songs, :artist_s)";
         $result3 = $conn->prepare($sqlArtist);
-        
-        $res = $result->execute($addArray);
-        $res2 = $result3->execute($addArray2);
 
-        /* verificar o sucesso na inserçao dos dados na BD*/
-        if($res === TRUE && $res2 === TRUE){
-            header("location:album.php?ida='.$al.'&alerta=0");
-        }else{
+        try{
+            $conn->beginTransaction();
+            $result->execute($addArray);
+            $id = $conn->lastInsertId();
+            $addArray2["songs"] = $id;
+            $result3->execute($addArray2);
+            
+            $conn->commit();
+            header('location:album.php?ida='.$al.'&alerta=0');
+        }
+        catch(PDOException $e){
+            $conn->rollBack();
             header("location:erro.php?alerta=1");
         }
     }
@@ -719,21 +725,24 @@ class Songs{
 
     public function removerSong()
     {
+        $ida = $_GET['ida'];
         $idm = $_GET['idm'];
         $sqlrm = "DELETE FROM musica_has_artista WHERE musica_id_m = ?";
         $res = $this->conexao->prepare($sqlrm);
         
         $sqlrm2 = "DELETE FROM musica WHERE id_m = ?";
         $res2 = $this->conexao->prepare($sqlrm2);
-        
-        $res->execute([$idm]);
-        $res2->execute([$idm]);
-        
-        if($res === true && $res2 === true){
+
+        try{
+            $this->conexao->beginTransaction();
+            $res->execute([$idm]);
+            $res2->execute([$idm]);
+            $this->conexao->commit();
             header('location: album.php?ida='.$ida.'&alerta=0');
         }
-        else{
-            header("location: erro.php?alerta=3");  
+        catch(PDOException $e){
+            $this->conexao->rollBack();
+            header("location: erro.php?alerta=3");
         }
     }
 }
@@ -1044,9 +1053,9 @@ class Generos{
         
         $sqlrm2 = "DELETE FROM generos WHERE id_g = ?";
         $res2 = $this->conexao->prepare($sqlrm2);
-        $res->execute([$idg]);
+        $res2->execute([$idg]);
         
-        if($res === true){
+        if($res2 === true){
             header('location: index.php?alerta=0');
         }
         else{
