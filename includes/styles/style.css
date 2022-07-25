@@ -822,3 +822,42 @@ i.bi-skip-start-fill{
     box-shadow: 0px 25px 10px var(--grad-color);
     margin-bottom: 10px;
 }
+
+.btn {
+    display: block;
+    width: 115px;
+    height: 28px;
+    background: var(--primary-color);
+    text-align: center;
+    border-radius: 5px;
+    color: var(--icon-color);
+    line-height: 15px;
+}
+
+.btn:hover{
+    background: white;
+}
+
+.logInput{
+    padding: 3px;
+    background: white;
+    display: block;
+    height: 28px;
+    border-radius: 5px;
+    border-width: 1px;
+    border-color: var(--primary-color);
+    border-style: solid;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+}
+
+input.btn{
+    line-height: 0px;
+    -webkit-appearance: none;
+}
+
+.loginFrom tbody, td, tfoot, th, thead, tr{
+    border-width: 5px;
+    border-color: transparent;
+}

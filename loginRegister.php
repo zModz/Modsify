@@ -22,7 +22,7 @@
         else{
     ?>
         <form method="POST" action="">
-        <table id="logTab">
+        <table class="loginFrom" id="logTab">
             <tr>
                 <td>
                     <input type="text" placeholder="Username" class="logInput" name="fuser"';
@@ -33,10 +33,10 @@
                     <?php if($error == "1"){ echo 'style="border:1px solid red;"'; } ?> required>
                 </td>
                 <td>
-                    <input type="submit" value="Login">
+                    <input class="btn" type="submit" value="Login">
                 </td>
                 <td>
-                    <a href="loginRegister_2.php">Register</a>
+                    <a class="btn" href="loginRegister_2.php">Register</a>
                 </td>
             </tr>
         </table>
