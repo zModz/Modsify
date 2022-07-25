@@ -62,8 +62,13 @@
                         if(isset($_SESSION["user"]))
                         {
                             echo "
+                                <hr style='color: var(--primary-color)' />
+
                                 <li class='nav-link'>
-                                    <div class='dropdown-divider'></div>
+                                    <a href='showGeneros.php'>
+                                        <i class='bx bxs-star icon'></i>
+                                        <span class='text nav-text'>Generos</span>
+                                    </a>
                                 </li>
 
                                 <li class='nav-link'>

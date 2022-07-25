@@ -258,8 +258,8 @@ class Album{
             echo        '</p>';
             if(isset($_SESSION['user'])){
                 echo        '<div class="albumBtns">';
-                echo            '<a class="alBtn" href="editAlbum.php?ida='.$row["id_al"].'">EDIT ALBUM</a>';
-                echo            '<a class="alBtn" href="removerAlbum.php?ida='.$row["id_al"].'" onclick="verificar(event);">REMOVE ALBUM</a>';
+                echo            '<a class="alBtn" href="editAlbum.php?ida='.$id.'">EDIT ALBUM</a>';
+                echo            '<a class="alBtn" href="removerAlbum.php?ida='.$id.'" onclick="verificar(event);">REMOVE ALBUM</a>';
                 echo        '</div>';
             }
             echo    '</div>';
@@ -519,8 +519,8 @@ class Songs{
                 echo        '</p>';
                 if(isset($_SESSION["user"])){
                     echo        '<div class="songBtns">';
-                    echo            '<a class="sgBtn" href="editMusic.php?idm='.$row["id_m"].'">edit</a>';
-                    echo            '<a class="sgBtn" href="removerMusic.php?idm='.$row["id_m"].'&ida='.$row["id_al"].'" onclick="verificar(event);">remove</a>';
+                    echo            '<a class="sgBtn" href="editMusic.php?idm='.$id.'">edit</a>';
+                    echo            '<a class="sgBtn" href="removerMusic.php?idm='.$id.'&ida='.$row["id_al"].'" onclick="verificar(event);">remove</a>';
                     echo        '</div>';
                 }
                 echo    '</div>';
@@ -965,12 +965,19 @@ class Generos{
             foreach ($res as $row) {
                 $id = $row["id_g"];
                 $titulo = $row["nome_g"];
-                
-                echo '<div class="musicShow">';                 
-                echo    '<div class="songInfo">';
-                echo        '<p class="songTitle">'.$titulo.'</p>';
-                echo    '</div>';
-                echo '</div>';
+            
+            
+            echo '<div class="box boxLink">';
+            echo    '<div style="width: 100%" class="albumInfo">';
+            echo        '<p class="albumTitle" title="'.$titulo.'">'.$titulo.'</p>';
+            if(isset($_SESSION["user"])){
+                echo        '<div class="songBtns">';
+                echo            '<a class="sgBtn" href="editGenero.php?idm='.$id.'">Edit Genero</a>';
+                echo            '<a class="sgBtn" href="removerGenero.php?idm='.$id.'" onclick="verificar(event);">Remove Genero</a>';
+                echo        '</div>';
+            }
+            echo    '</div>';
+            echo '</div>';
             }
         }
         else{
