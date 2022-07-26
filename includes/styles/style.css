@@ -614,6 +614,7 @@ p{
 }
 
 .album_banner .albumTitle{
+    max-width: 100%;
     font-size: 50px;
     color: var(--text-color);
 }
